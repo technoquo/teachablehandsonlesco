@@ -11,9 +11,6 @@
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
-         <!-- Font Awesome -->
-        <script src="https://kit.fontawesome.com/ccc950231e.js" crossorigin="anonymous"></script>
-
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
 
@@ -24,7 +21,7 @@
         <x-banner />
 
         <div class="min-h-screen bg-gray-100">
-            @livewire('navigation-menu')
+            @include('layouts.includes.instructor.navigation-menu')
 
             <!-- Page Heading -->
             @if (isset($header))
@@ -40,7 +37,7 @@
                 {{ $slot }}
             </main>
 
-            @include('layouts.includes.app.footer')
+            @include('layouts.includes.instructor.footer')
         </div>
 
         @stack('modals')
