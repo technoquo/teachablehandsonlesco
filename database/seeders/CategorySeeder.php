@@ -13,13 +13,11 @@ class CategorySeeder extends Seeder
     public function run(): void
     {
         $categories = [
-            'LESCO 1',
-            'LESCO 2',
-            'LESCO 3',
-            'LESCO 4',
-            'LESCO 5',
-            'LESCO 6',
-            'Taller de LESCO Salud 1'
+            'GENERAL',
+            'TALLER',
+            'NIÑOS',
+            'EMPRESARIAL',
+            'SALUD'
         ];
 
         foreach ($categories as $category) {

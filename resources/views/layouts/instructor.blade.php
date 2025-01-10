@@ -14,11 +14,17 @@
          <!-- Font Awesome -->
          <script src="https://kit.fontawesome.com/ccc950231e.js" crossorigin="anonymous"></script>
 
+     
+
+         
+
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
 
         <!-- Styles -->
         @livewireStyles
+
+        @stack('css')
     </head>
     <body class="font-sans antialiased">
         <x-banner />
@@ -46,5 +52,7 @@
         @stack('modals')
 
         @livewireScripts
+
+        @stack('js')
     </body>
 </html>
