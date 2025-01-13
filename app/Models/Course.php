@@ -7,6 +7,7 @@ use App\Enums\CourseStatus;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -69,6 +70,13 @@ class Course extends Model
     public function price(): BelongsTo
     {
         return $this->belongsTo(Price::class);
+    }
+
+
+    // Releacion uno a muchos
+    public function goals(): HasMany
+    {
+        return $this->hasMany(Goal::class);
     }
 
 }

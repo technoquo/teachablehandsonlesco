@@ -53,6 +53,14 @@
 
         @livewireScripts
 
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+        <script>
+            Livewire.on('swal', data => {
+                Swal.fire(data[0]);
+            })
+        </script>
+
         @stack('js')
     </body>
 </html>
