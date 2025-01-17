@@ -79,4 +79,9 @@ class Course extends Model
         return $this->hasMany(Goal::class);
     }
 
+    public function requeriments(): HasMany
+    {
+        return $this->hasMany(Requeriment::class);
+    }
+
 }

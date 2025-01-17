@@ -16,7 +16,12 @@ $links = [
                 'name' => 'Metas del curso',
                 'route' => route('instructor.courses.goals', $course),
                 'active' => request()->routeIs('instructor.courses.goals'),
-            ]
+            ],
+            [
+                'name' => 'Requisitos del curso',
+                'route' => route('instructor.courses.requirements', $course),
+                'active' => request()->routeIs('instructor.courses.requirements'),
+            ],
 ]
 
 
