@@ -16,3 +16,5 @@ Route::redirect('/', 'instructor/courses')->name('home');
 
  Route::get('courses/{course}/requeriments', [CourseController::class, 'requirements'])->name('courses.requirements');
 
+ Route::get('courses/{course}/curriculum', [CourseController::class, 'curriculum'])->name('courses.curriculum');
+

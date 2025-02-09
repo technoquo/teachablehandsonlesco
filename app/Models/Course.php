@@ -84,4 +84,9 @@ class Course extends Model
         return $this->hasMany(Requeriment::class);
     }
 
+    public function sections(): HasMany
+    {
+        return $this->hasMany(Section::class);
+    }
+
 }
