@@ -45,6 +45,8 @@ class ManageSections extends Component
             'name' => $this->name,
         ]);
 
+        $this->getSections();
+
         $this->reset('name');
     }
 
@@ -69,9 +71,21 @@ class ManageSections extends Component
         $this->reset('sectionEdit');
         $this->getSections();
     }
-    
+
+    public function destroy(Section $section){
+        $section->delete();
+        $this->getSections();
+
+        $this->dispatch('swal',[
+            "title" => "Eliminado!",
+            "text" => "La sección ha sido eliminada ",
+            "icon" => "success"
+        ]);
+    }
+
     public function render()
     {
         return view('livewire.instructor.courses.manage-sections');
     }
 }
+ 
