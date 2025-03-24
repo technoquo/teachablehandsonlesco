@@ -114,6 +114,18 @@ class ManageSections extends Component
         ]);
     }
 
+    public function sortSections($sorts)
+    {
+       
+        foreach ($sorts as $position => $sectionId) {
+            Section::find($sectionId)->update([
+                'position' => $position + 1
+            ]);
+        }
+
+        $this->getSections();
+    }
+
     public function render()
     {
         return view('livewire.instructor.courses.manage-sections');
