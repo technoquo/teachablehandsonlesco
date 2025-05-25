@@ -45,7 +45,14 @@
 
                     @else
                       @include('instructor.sections.show')
-                    @endif                    
+                    @endif 
+                    
+                    <div class="mt-4">
+                        @livewire('instructor.courses.manage-lessons', [
+                            'section' => $section,
+                            'lessons' => $section->lessons,
+                            ], key('section-lessons-'.$section->id))
+                    </div>
                 </div>
             </li>
             @endforeach
