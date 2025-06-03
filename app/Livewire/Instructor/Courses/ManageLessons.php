@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Instructor\Courses;
 
+use App\Events\VideoUploaded;
 use App\Models\Lesson;
 use App\Rules\UniqueLessonCourse;
 use Livewire\Component;
@@ -14,16 +15,14 @@ class ManageLessons extends Component
     use WithFileUploads;
 
     public $section;
-    public $lessson;
+    public $lessons;
 
     public $video, $url;
 
     public $lessonCreate = [
         'open' => false,
-        'name' => null,
-       // 'slug' => null,
-        'platform' => 1,
-        // 'video_path' => null,
+        'name' => null,     
+        'platform' => 1,      
         'video_original_name' => null,
 
     ];
@@ -64,6 +63,10 @@ class ManageLessons extends Component
             // For YouTube, you might want to extract the video ID or URL
             $this->lessonCreate['video_original_name'] = $this->url;
             $lesson = $this->section->lessons()->create($this->lessonCreate);
+
+            VideoUploaded::dispatch($lesson);
+
+
         } 
         
         $this->reset(['url', 'lessonCreate']);
@@ -78,6 +81,9 @@ class ManageLessons extends Component
       $lesson->video_path = $this->video->store('courses/lessons');
       
       $lesson->save();
+
+      VideoUploaded::dispatch($lesson);
+
       $this->reset('video');
      
     
