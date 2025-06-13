@@ -49,10 +49,10 @@ class ProcessLessonVideo implements ShouldQueue
 
                 $lesson->video_path = $matches[1];
 
-                $video_info = Http::get('https://www.googleapis.com/youtube/v3/videos?id=' . $lesson->video_path . '&key=' . config('services.youtube.key') . '&part=snippet,contentDetails,statistics,status')->json();
-                
+                $video_info = Http::get('https://www.googleapis.com/youtube/v3/videos?id='.$lesson->video_path.'&key='.config('services.youtube.key').'&part=snippet,contentDetails,statistics,status')->json();
 
-                    $duration = $video_info['items'][0]['contentDetails']['duration'];
+
+                $duration = $video_info['items'][0]['contentDetails']['duration'];
                 $patron = "%^PT(\d+H)?(\d+M)?(\d+S)?$%";
                 preg_match($patron, $duration, $matches);
 
@@ -61,7 +61,7 @@ class ProcessLessonVideo implements ShouldQueue
                 $segundos = isset($matches[3]) ? (int) substr($matches[3], 0, -1) : 0;
 
                 $lesson->duration = ($horas * 3600) + ($minutos * 60) + $segundos;
-                $lesson->image_path = 'https://img.youtube.com/vi/' . $lesson->video_path . '/0.jpg';
+                $lesson->image_path = 'https://img.youtube.com/vi/'.$lesson->video_path.'/0.jpg';
 
                 $lesson->is_processed = true;
                 $lesson->save();
@@ -70,7 +70,7 @@ class ProcessLessonVideo implements ShouldQueue
 
         } catch (\Exception $e) {
             // Log or handle the error
-            \Log::error("Thumbnail generation failed: " . $e->getMessage());
+            \Log::error("Thumbnail generation failed: ".$e->getMessage());
             // Optionally: mark the lesson as unprocessed or set a default image
         }
     }

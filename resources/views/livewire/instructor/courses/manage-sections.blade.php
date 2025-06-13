@@ -1,6 +1,6 @@
 <div>
-    <div 
-    x-data="{
+    <div
+        x-data="{
         destroySection(sectionId) {
             Swal.fire({
                 title: '¿Estás seguro?',
@@ -17,54 +17,55 @@
                 }
             });
         }
-    }" 
-    x-init="new Sortable($refs.sections, { 
-        animation: 150,  
-        handle: '.handle',         
-        ghostClass: 'bg-gray-400', 
-        store: { 
+    }"
+        x-init="new Sortable($refs.sections, {
+        animation: 150,
+        handle: '.handle',
+        ghostClass: 'bg-gray-400',
+        store: {
             set: (sortable) => {
                 @this.call('sortSections', sortable.toArray());
             }
         }
     });"
->
+    >
 
         {{--Listar secciones --}}
         @if ($sections->count())
-        <ul class="mb-6 space-y-6" x-ref="sections">
-            @foreach($sections as $section)
-            <li data-id="{{$section->id}}" wire:key="seccion-{{$section->id}}">
+            <ul class="mb-6 space-y-6" x-ref="sections">
+                @foreach($sections as $section)
+                    <li data-id="{{$section->id}}" wire:key="seccion-{{$section->id}}">
 
-                   @include('instructor.sections.create-position')
+                        @include('instructor.sections.create-position')
 
-                <div class="bg-gray-100 rounded-lg shadow-lg px-6 py-4 mt-6">
-                    @if($sectionEdit['id'] == $section->id)
+                        <div class="bg-gray-100 rounded-lg shadow-lg px-6 py-4 mt-6">
+                            @if($sectionEdit['id'] == $section->id)
 
-                     @include('instructor.sections.edit')
+                                @include('instructor.sections.edit')
 
-                    @else
-                      @include('instructor.sections.show')
-                    @endif 
-                    
-                    <div class="mt-4">
-                        @livewire('instructor.courses.manage-lessons', [
-                            'section' => $section,
-                            'lessons' => $section->lessons,
-                            ], key('section-lessons-'.$section->id))
-                    </div>
-                </div>
-            </li>
-            @endforeach
+                            @else
+                                @include('instructor.sections.show')
+                            @endif
 
-        </ul>
+                            <div class="mt-4">
+                                @livewire('instructor.courses.manage-lessons', [
+                                    'section' => $section,
+                                    'lessons' => $section->lessons,
+                                    'orderLessons' => $orderLessons,
+                                    ], key('section-lessons-'.$section->id))
+                            </div>
+                        </div>
+                    </li>
+                @endforeach
+
+            </ul>
         @endif
 
         @include('instructor.sections.create')
     </div>
 
     @push('js')
-    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.6/Sortable.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.6/Sortable.min.js"></script>
     @endpush
 
 

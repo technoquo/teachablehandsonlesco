@@ -12,10 +12,12 @@ class ManageSections extends Component
     public $name;
 
     public $sections;
-    public $sectionEdit  = [
+    public $sectionEdit = [
         'id' => null,
         'name' => null,
     ];
+
+    public $orderLessons;
 
     public $sectionPositionCreate = [];
 
@@ -32,10 +34,22 @@ class ManageSections extends Component
 
     public function getSections()
     {
-        return $this->sections = Section::where('course_id', $this->course->id)
-        ->with('lessons')
-        ->orderBy('position', 'asc')
-        ->get();
+        $this->sections = Section::where('course_id', $this->course->id)
+            ->with([
+                'lessons' => function ($query) {
+                    $query->orderBy('position', 'asc');
+                }
+            ])
+            ->orderBy('position', 'asc')
+            ->get();
+
+        $this->orderLessons = $this->sections
+            ->pluck('lessons')
+            ->collapse()
+            ->pluck('id');
+
+
+        return $this->sections;
     }
 
     public function store()
@@ -59,19 +73,18 @@ class ManageSections extends Component
             'sectionPositionCreate.'.$sectionId.'.name' => 'required',
         ]);
 
-        $position =  Section::find($sectionId)->position;
+        $position = Section::find($sectionId)->position;
 
         Section::where('course_id', $this->course->id)
             ->where('position', '>=', $position)
-           ->increment('position');
+            ->increment('position');
 
-        
+
         $this->course->sections()->create([
             'name' => $this->sectionPositionCreate[$sectionId]['name'],
             'position' => $position,
         ]);
-        
-       
+
 
         $this->getSections();
 
@@ -104,11 +117,12 @@ class ManageSections extends Component
         $this->getSections();
     }
 
-    public function destroy(Section $section){
+    public function destroy(Section $section)
+    {
         $section->delete();
         $this->getSections();
 
-        $this->dispatch('swal',[
+        $this->dispatch('swal', [
             "title" => "Eliminado!",
             "text" => "La sección ha sido eliminada ",
             "icon" => "success"
@@ -117,7 +131,7 @@ class ManageSections extends Component
 
     public function sortSections($sorts)
     {
-       
+
         foreach ($sorts as $position => $sectionId) {
             Section::find($sectionId)->update([
                 'position' => $position + 1
@@ -132,4 +146,3 @@ class ManageSections extends Component
         return view('livewire.instructor.courses.manage-sections');
     }
 }
- 

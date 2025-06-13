@@ -33,7 +33,7 @@ class UniqueLessonCourse implements ValidationRule
             if ($lesson) {
                 $fail('Ya existe una leccion con este nombre en este curso.');
             }
-       
+
         //
     }
 }

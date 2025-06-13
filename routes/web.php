@@ -12,7 +12,21 @@ Route::get('/', function () {
 
 
 Route::get('prueba', function () {
- 
+    $course = \App\Models\Course::first();
+
+    $sections = $course->sections()
+        ->with([
+            'lessons' => function ($query) {
+                $query->orderBy('position', 'desc');
+            }
+        ])
+        ->get();
+
+    $orderLessons = $sections->pluck('lessons')
+        ->collapse()
+        ->pluck('id');
+
+    return $orderLessons;
 });
 
 
