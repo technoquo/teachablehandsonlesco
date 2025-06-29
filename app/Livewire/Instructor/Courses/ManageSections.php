@@ -3,8 +3,10 @@
 namespace App\Livewire\Instructor\Courses;
 
 use App\Models\Course;
+use App\Models\Lesson;
 use App\Models\Section;
 use Livewire\Component;
+use Livewire\Attributes\On;
 
 class ManageSections extends Component
 {
@@ -32,8 +34,10 @@ class ManageSections extends Component
         $this->getSections();
     }
 
+
     public function getSections()
     {
+
         $this->sections = Section::where('course_id', $this->course->id)
             ->with([
                 'lessons' => function ($query) {
@@ -49,7 +53,6 @@ class ManageSections extends Component
             ->pluck('id');
 
 
-        return $this->sections;
     }
 
     public function store()
@@ -138,6 +141,22 @@ class ManageSections extends Component
             ]);
         }
 
+        $this->getSections();
+    }
+
+    #[On('sortLessons')]
+    public function sortLessons($sorts, $sectionId)
+    {
+
+    
+        foreach ($sorts as $position => $lessonId) {
+            Lesson::find($lessonId)->update([
+                'position' => $position + 1,
+                'section_id' => $sectionId
+            ]);
+        }
+
+        // Luego de guardar, pide que se refresquen las secciones desde el frontend
         $this->getSections();
     }
 

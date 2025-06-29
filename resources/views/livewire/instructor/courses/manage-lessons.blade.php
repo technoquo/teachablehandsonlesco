@@ -1,6 +1,7 @@
 <div>
-    <div x-data="{
-           destroyLesson(lessonId) {
+    <div
+        x-data="() => ({
+        destroyLesson(lessonId) {
             Swal.fire({
                 title: '¿Estás seguro?',
                 text: '¡No podrás revertir esto!',
@@ -15,11 +16,32 @@
                     @this.call('destroy', lessonId);
                 }
             });
-        }
-        }" class="mb-6">
-        <ul class="space-y-4">
+        },
+    })"
+        x-init="
+        new Sortable($refs.lessons, {
+            group: 'lessons',
+            animation: 150,
+            handle: '.handle-lessons',
+            ghostClass: 'bg-gray-400',
+           store: {
+                set: (sortable) => {
+                    Livewire.dispatch('sortLessons', {
+                        sorts: sortable.toArray(),
+                        sectionId: {{$section->id}},
+                    });
+
+
+                }
+            }
+        });"
+        class="mb-6"
+    >
+
+        <ul class="space-y-4" x-ref="lessons">
             @foreach($lessons as $lesson)
-                <li wire:key="lesson-{{ $lesson->id }}" class="mb-2">
+                <li wire:key="lesson-{{ $lesson->id }}" class="mb-2" data-id="{{$lesson->id}}">
+                    {{-- Include the lesson position --}}
                     <div class="bg-white rounded-lg shadow-lg px-6 py-4">
                         @if($lessonEdit['id'] == $lesson->id)
                             <form wire:submit.prevent='update'>
@@ -45,7 +67,7 @@
                             </form>
                         @else
                             <div class="md:flex  md:items-center">
-                                <h1 class="md:flex-1 truncate cursor-move">
+                                <h1 class="md:flex-1 truncate cursor-move handle-lessons">
                                     <i class="fas fa-play-circle text-indigo-500 mr-2"></i>
                                     Lección: {{$orderLessons->search($lesson->id) + 1}} -
                                     {{-- Use the lesson name from the ordered lessons --}}
