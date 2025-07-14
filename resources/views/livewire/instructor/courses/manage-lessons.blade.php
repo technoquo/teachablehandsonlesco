@@ -66,23 +66,39 @@
                                 </div>
                             </form>
                         @else
-                            <div class="md:flex  md:items-center">
-                                <h1 class="md:flex-1 truncate cursor-move handle-lessons">
-                                    <i class="fas fa-play-circle text-indigo-500 mr-2"></i>
-                                    Lección: {{$orderLessons->search($lesson->id) + 1}} -
-                                    {{-- Use the lesson name from the ordered lessons --}}
-                                    {{ $lesson->name }}
-                                </h1>
-                                <div class="space-x-3 md:shrink-0 md:ml-4">
-                                    <button wire:click="edit({{$lesson->id}})">
-                                        <i class="fas fa-edit hover:text-blue-500 cursor-pointer"></i>
-                                    </button>
-                                    <button x-on:click="destroyLesson({{$lesson->id}})">
-                                        <i class="fas fa-trash hover:text-red-500 cursor-pointer"></i>
-                                    </button>
-                                    <button>
-                                        <i class="fas fa-chevron-down hover:text-blue-500 cursor-pointer"></i>
-                                    </button>
+                            <div x-data="{
+                               open: true,
+
+                            }">
+                                <div class="md:flex  md:items-center">
+                                    <h1 class="md:flex-1 truncate cursor-move handle-lessons">
+                                        <i class="fas fa-play-circle text-indigo-500 mr-2"></i>
+                                        Lección: {{$orderLessons->search($lesson->id) + 1}} -
+                                        {{-- Use the lesson name from the ordered lessons --}}
+                                        {{ $lesson->name }}
+                                    </h1>
+                                    <div class="space-x-3 md:shrink-0 md:ml-4">
+                                        <button wire:click="edit({{$lesson->id}})">
+                                            <i class="fas fa-edit hover:text-blue-500 cursor-pointer"></i>
+                                        </button>
+                                        <button x-on:click="destroyLesson({{$lesson->id}})">
+                                            <i class="fas fa-trash hover:text-red-500 cursor-pointer"></i>
+                                        </button>
+                                        <button x-on:click="open = !open">
+                                            <i class="fas  hover:text-blue-500 cursor-pointer"
+                                               :class="{
+                                                    'fa-chevron-up': open,
+                                                    'fa-chevron-down': !open
+                                                  }">
+                                            </i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div x-show="open"
+                                     x-cloak
+                                     class="mt-4">
+                                    @livewire('instructor.courses.manage-lesson-content',
+                                                            ['lesson' => $lesson],key('section-'.$section->id . '-lesson-'.$lesson->id))
                                 </div>
                             </div>
                         @endif

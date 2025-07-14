@@ -2,13 +2,16 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Facades\Storage;
 
 #[ObservedBy([LessonObserver::class])]
 class Lesson extends Model
 {
     use HasFactory;
+
     protected $fillable = [
         'name',
         'slug',
@@ -30,9 +33,21 @@ class Lesson extends Model
         'is_processed' => 'boolean'
     ];
 
+    public function image(): Attribute
+    {
+        return new Attribute(
+            get: function () {
+                if ($this->platform == 1) {
+                    return Storage::url($this->image_path);
+                }
+                return $this->image_path;
+            }
+        );
+    }
+
     public function section()
     {
         return $this->belongsTo(Section::class);
     }
-   
+
 }
