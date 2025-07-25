@@ -38,20 +38,20 @@ class CourseController extends Controller
      */
     public function store(Request $request)
     {
-      
-      $data =  $request->validate([
+
+        $data = $request->validate([
             'title' => 'required',
             'slug' => 'required|unique:courses',
             'category_id' => 'required|exists:categories,id',
             'level_id' => 'required|exists:levels,id',
-            'price_id' => 'required|exists:prices,id',           
+            'price_id' => 'required|exists:prices,id',
         ]);
 
-      $data['user_id'] = Auth::id();
+        $data['user_id'] = Auth::id();
 
-       $course = Course::create($data);
+        $course = Course::create($data);
 
-       return redirect()->route('instructor.courses.edit', $course);
+        return redirect()->route('instructor.courses.edit', $course);
     }
 
     /**
@@ -79,27 +79,28 @@ class CourseController extends Controller
      */
     public function update(Request $request, Course $course)
     {
-        $data =  $request->validate([
+       
+        $data = $request->validate([
             'title' => 'required|max:255',
-            'slug' => 'required|unique:courses,slug,' . $course->id,
+            'slug' => 'required|unique:courses,slug,'.$course->id,
             'summary' => 'nullable|max:1000',
             'description' => 'nullable',
             'category_id' => 'required|exists:categories,id',
             'level_id' => 'required|exists:levels,id',
-            'price_id' => 'required|exists:prices,id',           
+            'price_id' => 'required|exists:prices,id',
         ]);
 
         if ($request->hasFile('image')) {
-            if ($course->image_path){
+            if ($course->image_path) {
                 Storage::delete($course->image_path);
             }
 
-         $data['image_path'] =  Storage::put('courses/image', $request->file('image'));
+            $data['image_path'] = Storage::put('courses/image', $request->file('image'));
         }
 
         $course->update($data);
 
-       // session()->flash('flash.bannerStyle', 'danger');
+        // session()->flash('flash.bannerStyle', 'danger');
         session()->flash('flash.banner', 'Curso actualizado correctamente');
 
         return redirect()->route('instructor.courses.edit', $course);
